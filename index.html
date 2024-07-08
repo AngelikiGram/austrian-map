@@ -6,26 +6,8 @@
         <meta name="viewport" content="user-scalable=no, width=device-width, height=device-height, maximum-scale=1.0, minimum-scale=1.0, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/css/autoComplete.min.css">
         <script src="https://unpkg.com/@tmcw/togeojson"></script>
-        <style>
-            body, html {
-                margin: 0;
-                width: 100%;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-            }
-            #map {
-                flex-grow: 1;
-            }
-            #controls {
-                padding: 10px;
-                background: #fff;
-                text-align: center;
-            }
-        </style>
-        </style>
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-        <link href="styles.css" rel="stylesheet">
+        <link href="./styles.css" rel="stylesheet">
     </head>
 
     <body>
@@ -48,121 +30,10 @@
     </body>
     <script type="text/javascript" src="./build/procedural-gl.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="./gpx_tracks.js"></script>
-    <script src="./flyover_latlon.js"></script>
-    <!-- <script src="./dem_type.js"></script> -->
-    <script type="text/javascript">
+    <script src="./ui/gpx_tracks.js"></script>
+    <script src="./ui/flyover_latlon.js"></script>
+    <script src="./ui/dem_type.js"></script>
+    <!-- <script type="text/javascript">
         
-        const YOUR_MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiYWdyYW1tYXQiLCJhIjoiY2xoNHNkZ3lkMG9iYTNnbzVhY2F4ZnN1ZCJ9.qPqebUE9RSdLRMU4f0H3zw';
-
-        let mapInstance = null;
-        let currentLatitude = 48.210033; // Default latitude
-        let currentLongitude = 16.363449; // Default longitude
-
-        function disposeMap() {
-            if (mapInstance) {
-                mapInstance.dispose();
-                mapInstance = null;
-            }
-        }
-
-        // Function to initialize the map with a given URL format
-        function setMap(urlFormat) {
-            disposeMap(); // Dispose of the previous map instance
-
-            const container = document.getElementById('map');
-            container.innerHTML = ""; // Clear previous map content
-
-            const datasource = {
-                elevation: {
-                    apiKey: 'YOUR_ELEVATION_API_KEY',
-                    attribution: 'Elevation attribution',
-                    pixelEncoding: 'terrain-rgb',
-                    maxZoom: 14,
-                    urlFormat: urlFormat
-                },
-                imagery: {
-                    apiKey: 'YOUR_IMAGERY_API_KEY',
-                    attribution: 'Imagery attribution',
-                    maxZoom: 21,
-                    urlFormat: 'https://maps.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg'
-                }
-            };
-
-            mapInstance = Procedural.init({ container, datasource });
-            Procedural.setCameraModeControlVisible(true);
-            Procedural.setCompassVisible(true);
-            Procedural.setUserLocationControlVisible(true);
-            Procedural.setRotationControlVisible(true);
-            Procedural.setZoomControlVisible(true);
-            
-            // Configure controls
-            var configuration = {
-                minDistance: 10,
-                maxDistance: 5000000,
-                maxBounds: 7500,
-                minPolarAngle: 0.05 * Math.PI,
-                maxPolarAngle: 1.0 * Math.PI,
-                noPan: false,
-                noRotate: false,
-                noZoom: false
-            };
-            Procedural.configureControls(configuration);
-
-            Procedural.displayLocation({ latitude: currentLatitude, longitude: currentLongitude });
-        }
-
-        function updateURLParameter(param, value) {
-            const url = new URL(window.location);
-            url.searchParams.set(param, value);
-            window.location.href = url.toString();
-        }
-
-        function getURLParameter(param) {
-            const url = new URL(window.location);
-            return url.searchParams.get(param);
-        }
-
-        // Determine the initial map type from the URL
-        const initialMapType = getURLParameter('map') || 'DSM';        
-        const initialLatitude = parseFloat(getURLParameter('lat'));
-        const initialLongitude = parseFloat(getURLParameter('lng'));
-
-        if (!isNaN(initialLatitude) && !isNaN(initialLongitude)) {
-            currentLatitude = initialLatitude;
-            currentLongitude = initialLongitude;
-        }
-
-        if (initialMapType === 'DSM') {
-            setMap('http://alpinemaps.cg.tuwien.ac.at/tiles/mapbox_terrain_rgb/{z}/{x}/{y}.png');
-        } else if (initialMapType === 'DTM') {
-            setMap(`https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}@2x.pngraw?access_token=${YOUR_MAPBOX_ACCESS_TOKEN}`);
-        }
-
-        // Function to update multiple URL parameters
-        function updateURLParameters(params) {
-            const url = new URL(window.location);
-            Object.keys(params).forEach(key => {
-                url.searchParams.set(key, params[key]);
-            });
-            window.location.href = url.toString();
-        }
-
-        // Update the event listeners for the DSM and DTM buttons
-        document.getElementById('dsmButton').addEventListener('click', function() {
-            updateURLParameters({
-                'map': 'DSM',
-                'lat': currentLatitude.toString(),
-                'lng': currentLongitude.toString()
-            });
-        });
-
-        document.getElementById('dtmButton').addEventListener('click', function() {
-            updateURLParameters({
-                'map': 'DTM',
-                'lat': currentLatitude.toString(),
-                'lng': currentLongitude.toString()
-            });
-        });
-    </script>
+    </script> -->
 </html>
