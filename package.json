@@ -6,12 +6,13 @@
   "module": "build/procedural-gl.module.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run compile && npm run uglify",
+    "build": "vite build",
     "build-dev": "rollup -c --environment DEV",
     "compile": "cd shaders && ./minify.sh && cd - && rollup -c",
-    "dev": "find src lib shaders -type f \\( -iname \\*js -o -iname \\*jsx -o -iname \\*vert -o -iname \\*frag -o -iname \\*glsl \\) | entr npm run build-dev",
+    "dev": "vite",
     "lint": "eslint src --ext js --fix",
-    "uglify": "uglifyjs build/procedural-gl.js -o build/procedural-gl.min.js -c -m"
+    "uglify": "uglifyjs build/procedural-gl.js -o build/procedural-gl.min.js -c -m",
+    "deploy": "vercel --prod"
   },
   "files": [
     "build/procedural-gl.js",
@@ -21,20 +22,25 @@
     "package.json",
     "README.md"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "vercel": "^32.3.0"
+  },
   "devDependencies": {
-    "eslint": "^7.7.0",
-    "eslint-config-mdcs": "^5.0.0",
     "@rollup/plugin-alias": "^3.1.0",
     "@rollup/plugin-commonjs": "^11.1.0",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "@rollup/plugin-replace": "^2.3.2",
     "@rollup/plugin-sucrase": "^3.0.1",
+    "eslint": "^7.7.0",
+    "eslint-config-mdcs": "^5.0.0",
     "rollup": "^1.14.6",
     "rollup-plugin-root-import": "^1.0.0",
     "rollup-plugin-string": "^3.0.0",
     "rollup-plugin-visualizer": "^4.0.4",
-    "uglify-es": "^3.3.9"
+    "uglify-es": "^3.3.9",
+    "uglify-js": "^3.18.0",
+    "vite": "^5.3.3",
+    "vite-plugin-restart": "^0.4.0"
   },
   "repository": {
     "type": "git",
