@@ -34862,7 +34862,11 @@
 	}
 
 	const ELEVATION_POOL_SIZE = elevationPoolSize;
-	const ELEVATION_TILE_SIZE = 512;
+	let ELEVATION_TILE_SIZE = 257; // 512;
+	if (params.get('map') == 'DTM'){
+		console.log('DTM');
+		ELEVATION_TILE_SIZE = 512;
+	}
 	const IMAGERY_POOL_SIZE = imageryPoolSize;
 	const IMAGERY_TILE_SIZE = 256;
 	const INTERPOLATE_FLOAT = params.has( 'interpolateFloat' );
@@ -43577,7 +43581,7 @@ void main(){vec2 z=gl_FragCoord.xy*STEP;vec3 o=2.0*vec3(z-0.5,0.0);float A=min(0
 	        , React.createElement(EngineControlsTop, null)
 	        , React.createElement(EngineControlsBottom, null)
 	        , React.createElement(Compass, null)
-	        , React.createElement(PoweredBy, null)
+	        // , React.createElement(PoweredBy, null)
 	      )
 	    );
 	  }

@@ -1,0 +1,96 @@
+/* Existing styles */
+body, html {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+#map {
+    flex-grow: 1;
+}
+
+#Menu {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: #333542;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    width: 200px; /* Adjusted width */
+    outline: 1px solid white;
+}
+#Menu:hover {
+    /* background-color: rgb(63, 63, 63);  */
+    opacity: 0.8; /* Make it transparent to some level */
+}
+
+#Menu:hover #gpxFileInput,
+#Menu:hover #latitudeInput,
+#Menu:hover #longitudeInput,
+#Menu:hover #displayLocationBtn,
+#dsmButton,
+#dtmButton {
+    opacity: 1.0; /* Ensure these elements do not become transparent */
+}
+
+#gpxFileInput {
+    display: block;
+    margin: 0 auto;
+    width: 100%; /* Define a specific width */
+    box-sizing: border-box; /* Ensures padding and border are included in the width */
+}
+
+#fileInputLabel {
+    display: inline-block;
+    cursor: pointer;
+
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+
+    /* center the text */
+    text-align: center;
+
+    /* Center the element */
+    display: block;
+    margin: 0 auto;
+}
+
+.buttons-container {
+    text-align: center; /* Center-align the inline-block elements */
+    display: flex;
+    justify-content: center; /* Center the buttons horizontally */
+    gap: 10px; /* Space between the buttons */
+}
+
+#dsmButton, #dtmButton {
+    display: inline-block; /* Changed from block to inline-block */
+    margin: 0 5px; /* Adjusted to add horizontal margin, remove auto */
+    width: calc(50% - 10px); /* Adjust width to fit both on the same line, accounting for margin */
+    box-sizing: border-box; /* Ensures padding and border are included in the width */
+    margin-bottom: 20px; /* Space below the buttons */
+}
+
+#latitudeInput, #longitudeInput {
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding doesn't add to the width */
+    margin-bottom: 5px; /* Adds some space between the elements */
+}
+
+#latitudeInput, #longitudeInput {
+    width: calc(50% - 4px); /* Adjust width if necessary */
+    display: inline-block; /* Allows them to be on the same line */
+    text-align: center; /* Centralizes text inside the input boxes */
+}
+
+#displayLocationBtn {
+    width: auto; /* Adjusts the button width to fit its content */
+    padding: 0 10px; /* Adjusts padding for aesthetics */
+    /* Centers the button horizontally */
+    display: block;
+    margin: 0 auto;
+}
