@@ -15,12 +15,6 @@
     "deploy": "vercel --prod"
   },
   "files": [
-    "build/procedural-gl.js",
-    "build/procedural-gl.min.js",
-    "build/procedural-gl.module.js",
-    "LICENSE",
-    "package.json",
-    "README.md"
   ],
   "dependencies": {
     "vercel": "^32.3.0"
