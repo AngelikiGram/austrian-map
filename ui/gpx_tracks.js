@@ -1,44 +1,60 @@
-// Assuming gpxFileInput is a reference to an <input type="file"> element
-if (!gpxFileInput) {
-    console.error("gpxFileInput is not defined or not selected correctly.");
-} else {
-    // Add an event listener to handle file selection
-    gpxFileInput.addEventListener('change', function(event) {
-        handleGPXFile(event);
+// Initialization function
+function initializeGPXFileInput() {
+    const gpxFileInput = document.getElementById('gpxFileInput');
+    if (!gpxFileInput) {
+        console.error("gpxFileInput is not defined or not selected correctly.");
+        return;
+    }
+    gpxFileInput.addEventListener('change', handleGPXFile);
+
+    const fileInputLabel = document.getElementById('fileInputLabel');
+    fileInputLabel.addEventListener('click', () => gpxFileInput.click());
+    fileInputLabel.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            gpxFileInput.click();
+        }
     });
 }
 
+// Function to handle GPX file input
 function handleGPXFile(event) {
     const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const gpxData = new DOMParser().parseFromString(event.target.result, 'application/xml');
-            const geojson = toGeoJSON.gpx(gpxData); // Ensure toGeoJSON.gpx() is available
-            let featureCollection = convertToFeatureCollection(geojson);
-            let featuresCollection = JSON.stringify(featureCollection);
+    if (!file) return;
 
-            console.log(featuresCollection); // Log the feature collection
+    const reader = new FileReader();
+    reader.onload = (event) => processGPXData(event.target.result);
+    reader.readAsText(file);
+}
 
-            // Assuming Procedural.addOverlay is ready and accepts a JSON object
-            Procedural.addOverlay(JSON.parse(featuresCollection));
+// Function to process GPX data
+function processGPXData(gpxContent) {
+    const gpxData = new DOMParser().parseFromString(gpxContent, 'application/xml');
+    const geojson = toGeoJSON.gpx(gpxData); // Ensure toGeoJSON.gpx() is available
+    const featureCollection = convertToFeatureCollection(geojson);
+    displayFeatureCollection(featureCollection);
+    focusOnStartingCoordinate(geojson);
+}
 
-            console.log('startingCoordinate');
+// Function to display feature collection
+function displayFeatureCollection(featureCollection) {
+    const featuresCollectionStr = JSON.stringify(featureCollection);
+    console.log(featuresCollectionStr); // Log the feature collection
+    Procedural.addOverlay(JSON.parse(featuresCollectionStr)); // Assuming Procedural.addOverlay is ready
+}
 
-            // Focus on the starting coordinate of the route
-            if (geojson.features.length > 0 && geojson.features[0].geometry.coordinates.length > 0) {
-                const startingCoordinate = geojson.features[0].geometry.coordinates[0];
-                console.log('startingCoordinate', startingCoordinate);
-                Procedural.displayLocation({
-                    latitude: startingCoordinate[1],
-                    longitude: startingCoordinate[0]
-                });
-            }
-        };
-        reader.readAsText(file);
+// Function to focus on the starting coordinate of the route
+function focusOnStartingCoordinate(geojson) {
+    if (geojson.features.length > 0 && geojson.features[0].geometry.coordinates.length > 0) {
+        const startingCoordinate = geojson.features[0].geometry.coordinates[0];
+        console.log('startingCoordinate', startingCoordinate);
+        Procedural.displayLocation({
+            latitude: startingCoordinate[1],
+            longitude: startingCoordinate[0]
+        });
     }
 }
 
+// Function to convert GeoJSON to a feature collection
 function convertToFeatureCollection(geojson) {
     let idCounter = 0;
     const features = geojson.features.map(feature => ({
@@ -57,13 +73,4 @@ function convertToFeatureCollection(geojson) {
     };
 }
 
-/* Add an event listener to simulate a click on the actual file input when the label is clicked or focused and Enter/Space key is pressed */
-document.getElementById('fileInputLabel').addEventListener('click', function() {
-    document.getElementById('gpxFileInput').click();
-});
-
-document.getElementById('fileInputLabel').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter' || e.key === ' ') {
-        document.getElementById('gpxFileInput').click();
-    }
-});
+initializeGPXFileInput();

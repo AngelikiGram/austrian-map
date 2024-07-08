@@ -4,6 +4,24 @@ let mapInstance = null;
 let currentLatitude = 48.210033; // Default latitude
 let currentLongitude = 16.363449; // Default longitude
 
+function initializeMap() {
+    const initialMapType = getURLParameter('map') || 'DSM';
+    const initialLatitude = parseFloat(getURLParameter('lat'));
+    const initialLongitude = parseFloat(getURLParameter('lng'));
+
+    if (!isNaN(initialLatitude) && !isNaN(initialLongitude)) {
+        currentLatitude = initialLatitude;
+        currentLongitude = initialLongitude;
+    }
+
+    const urlFormat = initialMapType === 'DSM' ?
+        'https://alpinemaps.cg.tuwien.ac.at/tiles/mapbox_terrain_rgb/{z}/{x}/{y}.png' :
+        `https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}@2x.pngraw?access_token=${YOUR_MAPBOX_ACCESS_TOKEN}`;
+
+    setMap(urlFormat);
+    setupEventListeners();
+}
+
 function disposeMap() {
     if (mapInstance) {
         mapInstance.dispose();
@@ -11,14 +29,20 @@ function disposeMap() {
     }
 }
 
-// Function to initialize the map with a given URL format
 function setMap(urlFormat) {
     disposeMap(); // Dispose of the previous map instance
 
     const container = document.getElementById('map');
     container.innerHTML = ""; // Clear previous map content
 
-    const datasource = {
+    const datasource = createDatasource(urlFormat);
+    mapInstance = Procedural.init({ container, datasource });
+    configureMapControls();
+    Procedural.displayLocation({ latitude: currentLatitude, longitude: currentLongitude });
+}
+
+function createDatasource(urlFormat) {
+    return {
         elevation: {
             apiKey: 'YOUR_ELEVATION_API_KEY',
             attribution: 'Elevation attribution',
@@ -33,15 +57,15 @@ function setMap(urlFormat) {
             urlFormat: 'https://maps.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg'
         }
     };
+}
 
-    mapInstance = Procedural.init({ container, datasource });
+function configureMapControls() {
     Procedural.setCameraModeControlVisible(true);
     Procedural.setCompassVisible(true);
     Procedural.setUserLocationControlVisible(true);
     Procedural.setRotationControlVisible(true);
     Procedural.setZoomControlVisible(true);
-    
-    // Configure controls
+
     var configuration = {
         minDistance: 10,
         maxDistance: 5000000,
@@ -53,8 +77,6 @@ function setMap(urlFormat) {
         noZoom: false
     };
     Procedural.configureControls(configuration);
-
-    Procedural.displayLocation({ latitude: currentLatitude, longitude: currentLongitude });
 }
 
 function updateURLParameter(param, value) {
@@ -68,23 +90,6 @@ function getURLParameter(param) {
     return url.searchParams.get(param);
 }
 
-// Determine the initial map type from the URL
-const initialMapType = getURLParameter('map') || 'DSM';        
-const initialLatitude = parseFloat(getURLParameter('lat'));
-const initialLongitude = parseFloat(getURLParameter('lng'));
-
-if (!isNaN(initialLatitude) && !isNaN(initialLongitude)) {
-    currentLatitude = initialLatitude;
-    currentLongitude = initialLongitude;
-}
-
-if (initialMapType === 'DSM') {
-    setMap('http://alpinemaps.cg.tuwien.ac.at/tiles/mapbox_terrain_rgb/{z}/{x}/{y}.png');
-} else if (initialMapType === 'DTM') {
-    setMap(`https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}@2x.pngraw?access_token=${YOUR_MAPBOX_ACCESS_TOKEN}`);
-}
-
-// Function to update multiple URL parameters
 function updateURLParameters(params) {
     const url = new URL(window.location);
     Object.keys(params).forEach(key => {
@@ -93,19 +98,22 @@ function updateURLParameters(params) {
     window.location.href = url.toString();
 }
 
-// Update the event listeners for the DSM and DTM buttons
-document.getElementById('dsmButton').addEventListener('click', function() {
-    updateURLParameters({
-        'map': 'DSM',
-        'lat': currentLatitude.toString(),
-        'lng': currentLongitude.toString()
+function setupEventListeners() {
+    document.getElementById('dsmButton').addEventListener('click', () => {
+        updateURLParameters({
+            'map': 'DSM',
+            'lat': currentLatitude.toString(),
+            'lng': currentLongitude.toString()
+        });
     });
-});
 
-document.getElementById('dtmButton').addEventListener('click', function() {
-    updateURLParameters({
-        'map': 'DTM',
-        'lat': currentLatitude.toString(),
-        'lng': currentLongitude.toString()
+    document.getElementById('dtmButton').addEventListener('click', () => {
+        updateURLParameters({
+            'map': 'DTM',
+            'lat': currentLatitude.toString(),
+            'lng': currentLongitude.toString()
+        });
     });
-});
+}
+
+initializeMap();
